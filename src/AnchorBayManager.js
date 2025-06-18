@@ -34,16 +34,47 @@ export class AnchorBayManager {
     const globalY = anchor.anchor.y + localY;
 
     const tile = new PIXI.Graphics();
-    tile.beginFill(0x999999, 0.3);
-    tile.drawRect(globalX, globalY, this.chunkSize, this.chunkSize);
+    tile.lineStyle({
+        width: 4,              // 4 screen pixels
+        color: 0xffffff,       // bright white for visibility
+        alpha: 1,
+        alignment: 0.5
+      });
+      
+      // Generate a bright, random color
+    const randomColor = Math.floor(Math.random() * 0xffffff);
+    
+    // Optional: draw black backing for visual edge
+    tile.beginFill(0x000000, 0.2);
+    tile.drawRect(-2, -2, this.chunkSize + 4, this.chunkSize + 4);
     tile.endFill();
+    
+    // Actual tile fill
+    tile.beginFill(randomColor, 0.6);
+    tile.drawRect(0, 0, this.chunkSize, this.chunkSize);
+    tile.endFill();
+      
+      // Position the tile's container, not the shape
+      tile.x = globalX;
+      tile.y = globalY;
 
-    if (data.label) {
-      const label = new PIXI.Text(data.label, { fontSize: 24, fill: '#fff' });
-      label.x = globalX + 10;
-      label.y = globalY + 10;
-      anchor.container.addChild(label);
-    }
+      if (data.label) {
+        const label = new PIXI.Text(`${data.label}\n(${globalX}, ${globalY})`, {
+          fontSize: 48,
+          fill: '#ffffff',
+          stroke: '#000000',
+          strokeThickness: 6,
+          align: 'center'
+        });
+      
+        label.anchor.set(0.5); // Center the label
+        label.x = globalX + this.chunkSize / 2;
+        label.y = globalY + this.chunkSize / 2;
+        
+      
+        anchor.container.addChild(label);
+      }
+      
 
     anchor.tiles.push({ ...data, localX, localY });
     anchor.container.addChild(tile);
