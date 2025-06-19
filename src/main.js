@@ -11,13 +11,34 @@ const app = new PIXI.Application({
 await app.init();
 document.body.appendChild(app.canvas);
 
+// Trigger initial size sync once PIXI and CSS are stable
+app.ticker.addOnce(() => {
+  app.renderer.resize(window.innerWidth, window.innerHeight);
+  viewport.position.set(app.renderer.width / 2, app.renderer.height / 2);
+  console.log('Initial resize sync:', app.renderer.width, app.renderer.height);
+});
+
+// Ensure future resizes sync too
+window.addEventListener('resize', () => {
+  app.renderer.resize(window.innerWidth, window.innerHeight);
+  //iewport.position.set(app.renderer.width / 2, app.renderer.height / 2);
+  console.log('After window resize:', app.renderer.width, app.renderer.height);
+});
+
+console.log('Canvas:', app.canvas.width, app.canvas.height);
+console.log('Renderer:', app.renderer.width, app.renderer.height);
 
 // Create viewport container (camera layer)
 const viewport = new PIXI.Container();
 viewport.scale.set(0.002); // initial zoom level
-viewport.position.set(app.screen.width / 2, app.screen.height / 2);
+// Delay one frame to let PIXI calculate true screen size
+requestAnimationFrame(() => {
+  viewport.position.set(app.renderer.width / 2, app.renderer.height / 2);
+});
+
+
 //app.stage.scale.x = -1;
-app.stage.position.x = app.screen.width;
+//app.stage.position.x = app.screen.width;
 app.stage.addChild(viewport);
 
 // Add a visual marker
@@ -80,10 +101,10 @@ app.canvas.addEventListener('wheel', (e) => {
 
 
 // Resize logic
-window.addEventListener('resize', () => {
-  app.renderer.resize(window.innerWidth, window.innerHeight);
-  app.stage.position.x = app.screen.width;
-});
+// window.addEventListener('resize', () => {
+//   app.renderer.resize(window.innerWidth, window.innerHeight);
+//   app.stage.position.x = app.screen.width;
+// });
 
 
 // Anchor layout constants

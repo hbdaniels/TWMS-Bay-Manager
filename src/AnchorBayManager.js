@@ -27,6 +27,8 @@ export class AnchorBayManager {
   }
 
   addTileToAnchor(anchorId, localX, localY, data = {}) {
+    console.log('Tile request:', anchorId, data.localX ?? localX, ", ", data.localY ?? localY, data.label);
+
     const anchor = this.anchorBays.find(a => a.id === anchorId);
     if (!anchor) return;
 
@@ -60,20 +62,20 @@ export class AnchorBayManager {
 
       if (data.label) {
         const label = new PIXI.Text(`${data.label}\n(${globalX}, ${globalY})`, {
-          fontSize: 48,
-          fill: '#ffffff',
-          stroke: '#000000',
-          strokeThickness: 6,
-          align: 'center'
+          fontFamily: 'monospace',
+          fontSize: 20000,
+          fill: '#ff00ff',
+          align: 'center',
         });
-      
-        label.anchor.set(0.5); // Center the label
+        label.anchor.set(0.5);
         label.x = globalX + this.chunkSize / 2;
         label.y = globalY + this.chunkSize / 2;
-        
       
+        console.log('Adding label:', label.text);
         anchor.container.addChild(label);
       }
+      
+      
       
 
     anchor.tiles.push({ ...data, localX, localY });
