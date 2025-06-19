@@ -108,61 +108,59 @@ app.canvas.addEventListener('wheel', (e) => {
 
 
 // Anchor layout constants
-const ANCHOR_SPACING = 2000000; // 2,000,000mm = 1 anchor span
 const ANCHOR_SIZE = 10000; // For visual box size in canvas
 
-// Draw a grid of anchors (3x3 as demo)
-for (let row = -1; row <= 1; row++) {
-  for (let col = -1; col <= 1; col++) {
-    const anchorX = col * ANCHOR_SPACING;
-    const anchorY = row * ANCHOR_SPACING;
 
-    const box = new PIXI.Graphics();
-    box.lineStyle(2, 0x3399ff, 1);
-    box.beginFill(0x0000ff, 1);
-    box.drawRect(anchorX, anchorY, ANCHOR_SIZE, ANCHOR_SIZE);
-    box.endFill();
+// const anchorManager = new AnchorBayManager(viewport);
 
-    const label = new PIXI.Text(`(${anchorX}, ${anchorY})`, {
-      fontSize: 48,
-      fill: '#003366',
-    });
-    label.x = anchorX + 500;
-    label.y = anchorY + 500;
+// // Place a bay at (2M, 2M)
+// // 
+// const tileSize = 261659;
+// const tilesPerAnchor = 7;
+// const anchorSpacing = tileSize * tilesPerAnchor; // no gaps!
+// const anchorsWide = 3;
+// const anchorsHigh = 3;
 
-    viewport.addChild(box);
-    viewport.addChild(label);
-  }
-}
+// for (let ay = 0; ay < anchorsHigh; ay++) {
+//   for (let ax = 0; ax < anchorsWide; ax++) {
+//     const anchorId = `A${ax}-${ay}`;
+//     const anchorX = ax * anchorSpacing;
+//     const anchorY = ay * anchorSpacing;
+//     anchorManager.addAnchorBay(anchorId, anchorX, anchorY);
 
+//     for (let row = 0; row < tilesPerAnchor; row++) {
+//       for (let col = 0; col < tilesPerAnchor; col++) {
+//         const localX = (col - Math.floor(tilesPerAnchor / 2)) * tileSize;
+//         const localY = (row - Math.floor(tilesPerAnchor / 2)) * tileSize;
+//         anchorManager.addTileToAnchor(anchorId, localX, localY, {
+//           label: `C${col}-R${row}`
+//         });
+//       }
+//     }
+//   }
+// }
 const anchorManager = new AnchorBayManager(viewport);
 
-// Place a bay at (2M, 2M)
-// 
+// Define a single anchor bay at (0, 0)
+const anchorId = 'MainAnchor';
+//anchorManager.addAnchorBay(anchorId, 0, 0);
+
 const tileSize = 261659;
-const tilesPerAnchor = 7;
-const anchorSpacing = tileSize * tilesPerAnchor; // no gaps!
-const anchorsWide = 3;
-const anchorsHigh = 3;
+const tilesWide = 8;
+const tilesHigh = 8;
 
-for (let ay = 0; ay < anchorsHigh; ay++) {
-  for (let ax = 0; ax < anchorsWide; ax++) {
-    const anchorId = `A${ax}-${ay}`;
-    const anchorX = ax * anchorSpacing;
-    const anchorY = ay * anchorSpacing;
-    anchorManager.addAnchorBay(anchorId, anchorX, anchorY);
+// Build centered grid around anchor (0,0)
+for (let row = 0; row < tilesHigh; row++) {
+  for (let col = 0; col < tilesWide; col++) {
+    const localX = (col - Math.floor(tilesWide / 2)) * tileSize;
+    const localY = (row - Math.floor(tilesHigh / 2)) * tileSize;
 
-    for (let row = 0; row < tilesPerAnchor; row++) {
-      for (let col = 0; col < tilesPerAnchor; col++) {
-        const localX = (col - Math.floor(tilesPerAnchor / 2)) * tileSize;
-        const localY = (row - Math.floor(tilesPerAnchor / 2)) * tileSize;
-        anchorManager.addTileToAnchor(anchorId, localX, localY, {
-          label: `C${col}-R${row}`
-        });
-      }
-    }
+    anchorManager.addTile(anchorId, localX, localY, {
+      label: `R${row}C${col}`
+    });
   }
 }
+
 
 
 

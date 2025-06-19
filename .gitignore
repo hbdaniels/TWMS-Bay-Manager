@@ -3,5 +3,4 @@ dist/
 .vscode/
 .env
 .vite/
-stitched/
 src/Python/tiles
