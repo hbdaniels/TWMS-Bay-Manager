@@ -14,3 +14,18 @@ canvas {
   width: 100vw;
   height: 100vh;
 }
+
+
+#tile-debug-panel {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #00ff00;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  pointer-events: none; /* Doesn't block clicks */
+  z-index: 1000;
+}
