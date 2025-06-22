@@ -1,0 +1,8 @@
+{"results":[{"columns":[{"name":"MAINAREA","type":"VARCHAR2"},{"name":"BAY","type":"VARCHAR2"},{"name":"COORD_X1","type":"NUMBER"},{"name":"COORD_X2","type":"NUMBER"},{"name":"COORD_Y1","type":"NUMBER"},{"name":"COORD_Y2","type":"NUMBER"},{"name":"OFFSET_X","type":"NUMBER"},{"name":"OFFSET_Y","type":"NUMBER"},{"name":"CONFIG_NAME","type":"VARCHAR2"},{"name":"MIRROR_X","type":"CHAR"},{"name":"MIRROR_Y","type":"CHAR"},{"name":"HEIGHT","type":"NUMBER"},{"name":"INVERTROTATIONDIRECTION","type":"CHAR"},{"name":"ROTATIONOFFSET","type":"NUMBER"},{"name":"SHOWSIMPLEFLOOR","type":"CHAR"},{"name":"WEST","type":"CHAR"},{"name":"EAST","type":"CHAR"},{"name":"SLAB_SWAPPING_BORDER","type":"NUMBER"},{"name":"BAYROTATION","type":"NUMBER"}],"items":
+[
+{"mainarea":"SSL1","bay":"SL11","coord_x1":399240,"coord_x2":692492,"coord_y1":398451,"coord_y2":438989,"offset_x":-430000,"offset_y":-65000,"config_name":"SSL1-SL11","mirror_x":"Y","mirror_y":"N","height":3000,"invertrotationdirection":"Y","rotationoffset":90,"showsimplefloor":"Y","west":"Y","east":"Y","slab_swapping_border":635810,"bayrotation":0},
+{"mainarea":"SRT1","bay":"RT11","coord_x1":0,"coord_x2":220000,"coord_y1":0,"coord_y2":28000,"offset_x":0,"offset_y":230000,"config_name":"SRT1-RT11","mirror_x":"N","mirror_y":"N","height":12700,"invertrotationdirection":"Y","rotationoffset":0,"showsimplefloor":"Y","west":"N","east":"N","slab_swapping_border":0,"bayrotation":0},
+{"mainarea":"SSL2","bay":"SS10","coord_x1":0,"coord_x2":175885,"coord_y1":0,"coord_y2":890016,"offset_x":550000,"offset_y":-585000,"config_name":"SSL2-SS10","mirror_x":"N","mirror_y":"N","height":2000,"invertrotationdirection":"Y","rotationoffset":90,"showsimplefloor":"Y","west":"N","east":"N","slab_swapping_border":0,"bayrotation":0}
+
+
+]}]}

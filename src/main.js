@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { AnchorBayManager } from './AnchorBayManager';
 import { Tile } from './Tile.js';
+import { Bay } from './Bay.js';
 
 const app = new PIXI.Application({
   resizeTo: window, // Automatically match window size
@@ -36,9 +37,6 @@ requestAnimationFrame(() => {
 });
 
 
-
-//app.stage.scale.x = -1;
-//app.stage.position.x = app.screen.width;
 app.stage.addChild(viewport);
 
 
@@ -46,17 +44,30 @@ app.stage.addChild(viewport);
 // Add a visual marker
 const marker = new PIXI.Graphics()
   .beginFill(0x00ff00)
-  .drawRect(0, 0, 5000, 5000)
+  .drawRect(0, 0, 10000, 10000)
   .endFill();
 viewport.addChild(marker);
+
+const checkbox = document.getElementById('tileCheckbox');
+checkbox.addEventListener('change', (e) => {
+  tileLayer.visible = e.target.checked;
+});
+//Event Handlers
+// Mouse Controls:
 
 // Manual panning
 let isDragging = false;
 let lastPos = { x: 0, y: 0 };
 
 app.canvas.addEventListener('pointerdown', (e) => {
-  isDragging = true;
-  lastPos = { x: e.clientX, y: e.clientY };
+  if (e.button === 2) return;
+  if (e.button === 1) {
+    isDragging = true;
+    lastPos = { x: e.clientX, y: e.clientY };
+    return;
+  }
+  
+  
 });
 
 app.canvas.addEventListener('pointermove', (e) => {
@@ -97,113 +108,18 @@ app.canvas.addEventListener('wheel', (e) => {
   viewport.y -= (newScreenY - screenY);
 }, { passive: false });
 
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+});
 
 
 
-
-
-// Resize logic
-// window.addEventListener('resize', () => {
-//   app.renderer.resize(window.innerWidth, window.innerHeight);
-//   app.stage.position.x = app.screen.width;
-// });
-
-
-// Anchor layout constants
-//const ANCHOR_SIZE = 10000; // For visual box size in canvas
-
-
-// const anchorManager = new AnchorBayManager(viewport);
-
-// // Place a bay at (2M, 2M)
-// // 
-// const tileSize = 261659;
-// const tilesPerAnchor = 7;
-// const anchorSpacing = tileSize * tilesPerAnchor; // no gaps!
-// const anchorsWide = 3;
-// const anchorsHigh = 3;
-
-// for (let ay = 0; ay < anchorsHigh; ay++) {
-//   for (let ax = 0; ax < anchorsWide; ax++) {
-//     const anchorId = `A${ax}-${ay}`;
-//     const anchorX = ax * anchorSpacing;
-//     const anchorY = ay * anchorSpacing;
-//     anchorManager.addAnchorBay(anchorId, anchorX, anchorY);
-
-//     for (let row = 0; row < tilesPerAnchor; row++) {
-//       for (let col = 0; col < tilesPerAnchor; col++) {
-//         const localX = (col - Math.floor(tilesPerAnchor / 2)) * tileSize;
-//         const localY = (row - Math.floor(tilesPerAnchor / 2)) * tileSize;
-//         anchorManager.addTileToAnchor(anchorId, localX, localY, {
-//           label: `C${col}-R${row}`
-//         });
-//       }
-//     }
-//   }
-// }
-//const anchorManager = new AnchorBayManager(viewport);
-
-// Define a single anchor bay at (0, 0)
-//const anchorId = 'MainAnchor';
-//anchorManager.addAnchorBay(anchorId, 0, 0);
-
-// const tileSize = 261659;
-// const tilesWide = 8;
-// const tilesHigh = 8;
-
-// // Build centered grid around anchor (0,0)
-// for (let row = 0; row < tilesHigh; row++) {
-//   for (let col = 0; col < tilesWide; col++) {
-//     const localX = (col - Math.floor(tilesWide / 2)) * tileSize;
-//     const localY = (row - Math.floor(tilesHigh / 2)) * tileSize;
-//     console.log(`Placing tile ${tile.file} at (${localX}, ${localY})`);
-
-//     anchorManager.addTile(anchorId, localX, localY, {
-//       label: `R${row}C${col}`
-//     });
-//   }
-// }
-
-// const tileSize = 611500; // In mm (your surface size)
-// const tilesWide = 4;
-// const tilesHigh = 4;
-
-// Starting from (0,0) as center
-// for (let row = 0; row < tilesHigh; row++) {
-//   for (let col = 0; col < tilesWide; col++) {
-//     const localX = (col - Math.floor(tilesWide / 2)) * tileSize;
-//     const localY = (row - Math.floor(tilesHigh / 2)) * tileSize;
-
-    // const tile = new Tile({
-    //   anchorX: localX,
-    //   anchorY: localY,
-    //   width: tileSize,
-    //   height: tileSize,
-    //   label: `R${row}C${col}`,
-    //   container: tileLayer
-    // });
-    
-
-//     const tile = new Tile({
-//       anchorX: localX,
-//       anchorY: localY,
-//       width: 611500,
-//       height: 611500,
-//       file: 'tiles/z19_134004_214344.png', // <-- relative to /public
-//       label: `R${row}C${col}`,
-//       container: viewport
-//     });
-
-//     // Optional: store for future interaction
-//     // allTiles.push(tile);
-//   }
-// }
 
 // Create a tile Container:
 const tileLayer = new PIXI.Container();
 
 
-// Assuming the XML was loaded as text:
+//Load the bay visualization XML file: - this is the same as the xml in the visulaization table
 const xmlText = await fetch('./BayVisualization/Map1Visualization.xml').then(r => r.text());
 const parser = new DOMParser();
 const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
@@ -237,10 +153,10 @@ tileNodes.forEach(node => {
   
   console.log(`Loaded tile: ${name} at (${x}, ${y}) with size ${width}x${height}`);
   console.log(`Tile file: ${file}`);
-  // If you're using the image tiles, this is where you’d load them with PIXI.Sprite.from(file)
+  
 });
 console.log('tileLayer children:', tileLayer.children.length);
-tileLayer.rotation = 3 * Math.PI/2; // Rotate the tile layer by 270 degrees
+tileLayer.rotation = degToRad(-45); // Rotate the tile layer by 270 degrees
 viewport.addChild(tileLayer);
 
 // Compute bounding box of all tiles
@@ -262,6 +178,22 @@ viewport.position.set(
   app.renderer.height / 2 - centerY * viewport.scale.y
 );
 
+const bayOverlayContainer = new PIXI.Container();
+app.stage.addChild(bayOverlayContainer);
 
+import bayData from '../BayVisualization/NewBayConfiguration.json' assert { type: 'json' };
 
+bayData.results[0].items.forEach(bayItem => {
+  console.log('Bay item:', bayItem);
+  const bay = new Bay(bayItem);              // Instantiate
+  viewport.addChild(bay.bayContainer);     // Add graphics to overlay layer
+});
 
+//its unfortunate buy my axis are flipped
+// bayOverlayContainer.rotation = degToRad(270); // Rotate the bay overlay by 270 degrees
+// bayOverlayContainer.position.set(-65000, 430000)
+// viewport.addChild(bayOverlayContainer);
+
+function degToRad(degrees) {
+  return degrees * (Math.PI / 180);
+}

@@ -11,7 +11,7 @@ min_lon = -88.01396
 max_lon = -87.969942
 
 # 🔍 Zoom level
-zoom = 17
+zoom = 19
 
 # 🧭 Tile conversion
 def latlon_to_tilexy(lat, lon, z):

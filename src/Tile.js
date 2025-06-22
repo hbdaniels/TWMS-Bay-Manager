@@ -15,8 +15,8 @@ export class Tile {
   }) {
     this.x = anchorX;
     this.y = anchorY;
-    this.width = width;
-    this.height = height;
+    this.width = width//522240//;
+    this.height = height//522240//;
     this.file = file;
     this.label = label;
     this.originLat = originLat;
@@ -41,6 +41,7 @@ export class Tile {
         sprite.x = 0;
         sprite.y = 0;
         sprite.rotation = Math.PI / 2;
+        sprite.anchor.set(0.5, 0.5); // Center anchor for rotation
 
         sprite.eventMode = 'static'; // Required in Pixi v8+
         sprite.cursor = 'pointer';
